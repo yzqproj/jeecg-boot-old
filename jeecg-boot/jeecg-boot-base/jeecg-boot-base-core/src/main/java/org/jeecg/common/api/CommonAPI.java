@@ -44,7 +44,7 @@ public interface CommonAPI {
      * @param username
      * @return
      */
-    public LoginUser getUserByName(String username);
+    LoginUser getUserByName(String username);
 
 
     /**
@@ -84,14 +84,14 @@ public interface CommonAPI {
      * @param code
      * @return
      */
-    public List<DictModel> queryDictItemsByCode(String code);
+    List<DictModel> queryDictItemsByCode(String code);
 
     /**
      * 获取有效的数据字典项
      * @param code
      * @return
      */
-    public List<DictModel> queryEnableDictItemsByCode(String code);
+    List<DictModel> queryEnableDictItemsByCode(String code);
 
     /**
      * 13获取表数据字典

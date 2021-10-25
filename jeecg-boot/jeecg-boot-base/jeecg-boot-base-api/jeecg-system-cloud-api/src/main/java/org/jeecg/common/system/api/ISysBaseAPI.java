@@ -103,6 +103,7 @@ public interface ISysBaseAPI extends CommonAPI {
      * @param code
      * @return
      */
+    @Override
     @GetMapping("/sys/api/queryDictItemsByCode")
     List<DictModel> queryDictItemsByCode(@RequestParam("code") String code);
 
@@ -111,6 +112,7 @@ public interface ISysBaseAPI extends CommonAPI {
      * @param code
      * @return
      */
+    @Override
     @GetMapping("/sys/api/queryEnableDictItemsByCode")
     public List<DictModel> queryEnableDictItemsByCode(@RequestParam("code") String code);
 
@@ -132,6 +134,7 @@ public interface ISysBaseAPI extends CommonAPI {
      * @param code
      * @return
      */
+    @Override
     @GetMapping("/sys/api/queryTableDictItemsByCode")
     List<DictModel> queryTableDictItemsByCode(@RequestParam("table") String table, @RequestParam("text") String text, @RequestParam("code") String code);
 
@@ -313,6 +316,7 @@ public interface ISysBaseAPI extends CommonAPI {
      * @param username
      * @return
      */
+    @Override
     @GetMapping("/sys/api/queryUserRoles")
     Set<String> queryUserRoles(@RequestParam("username")String username);
 
@@ -321,6 +325,7 @@ public interface ISysBaseAPI extends CommonAPI {
      * @param username
      * @return
      */
+    @Override
     @GetMapping("/sys/api/queryUserAuths")
     Set<String> queryUserAuths(@RequestParam("username")String username);
 
@@ -366,6 +371,7 @@ public interface ISysBaseAPI extends CommonAPI {
      * @param key
      * @return
      */
+    @Override
     @GetMapping("/sys/api/translateDict")
     String translateDict(@RequestParam("code") String code, @RequestParam("key") String key);
 
@@ -373,6 +379,7 @@ public interface ISysBaseAPI extends CommonAPI {
      * 42查询数据权限
      * @return
      */
+    @Override
     @GetMapping("/sys/api/queryPermissionDataRule")
     List<SysPermissionDataRuleModel> queryPermissionDataRule(@RequestParam("component") String component, @RequestParam("requestPath")String requestPath, @RequestParam("username") String username);
 
@@ -381,6 +388,7 @@ public interface ISysBaseAPI extends CommonAPI {
      * @param username
      * @return
      */
+    @Override
     @GetMapping("/sys/api/getCacheUser")
     SysUserCacheInfo getCacheUser(@RequestParam("username") String username);
 

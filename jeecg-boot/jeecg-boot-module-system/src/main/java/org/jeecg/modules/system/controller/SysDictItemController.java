@@ -161,7 +161,7 @@ public class SysDictItemController {
 	@RequestMapping(value = "/dictItemCheck", method = RequestMethod.GET)
 	@ApiOperation("字典重复校验接口")
 	public Result<Object> doDictItemCheck(SysDictItem sysDictItem, HttpServletRequest request) {
-		int num = 0;
+		long num = 0;
 		LambdaQueryWrapper<SysDictItem> queryWrapper = new LambdaQueryWrapper<SysDictItem>();
 		queryWrapper.eq(SysDictItem::getItemValue,sysDictItem.getItemValue());
 		queryWrapper.eq(SysDictItem::getDictId,sysDictItem.getDictId());

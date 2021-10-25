@@ -39,6 +39,7 @@ public class JeecgRedisCacheWriter implements RedisCacheWriter {
         this.sleepTime = sleepTime;
     }
 
+    @Override
     public void put(String name, byte[] key, byte[] value, @Nullable Duration ttl) {
         Assert.notNull(name, "Name must not be null!");
         Assert.notNull(key, "Key must not be null!");
@@ -54,6 +55,7 @@ public class JeecgRedisCacheWriter implements RedisCacheWriter {
         });
     }
 
+    @Override
     public byte[] get(String name, byte[] key) {
         Assert.notNull(name, "Name must not be null!");
         Assert.notNull(key, "Key must not be null!");
@@ -62,6 +64,7 @@ public class JeecgRedisCacheWriter implements RedisCacheWriter {
         });
     }
 
+    @Override
     public byte[] putIfAbsent(String name, byte[] key, byte[] value, @Nullable Duration ttl) {
         Assert.notNull(name, "Name must not be null!");
         Assert.notNull(key, "Key must not be null!");
@@ -97,6 +100,7 @@ public class JeecgRedisCacheWriter implements RedisCacheWriter {
         });
     }
 
+    @Override
     public void remove(String name, byte[] key) {
         Assert.notNull(name, "Name must not be null!");
         Assert.notNull(key, "Key must not be null!");
@@ -119,6 +123,7 @@ public class JeecgRedisCacheWriter implements RedisCacheWriter {
         }
     }
 
+    @Override
     public void clean(String name, byte[] pattern) {
         Assert.notNull(name, "Name must not be null!");
         Assert.notNull(pattern, "Pattern must not be null!");
@@ -145,6 +150,8 @@ public class JeecgRedisCacheWriter implements RedisCacheWriter {
             return "OK";
         });
     }
+
+
 
     void lock(String name) {
         this.execute(name, (connection) -> {
@@ -218,4 +225,6 @@ public class JeecgRedisCacheWriter implements RedisCacheWriter {
     private static byte[] createCacheLockKey(String name) {
         return (name + "~lock").getBytes(StandardCharsets.UTF_8);
     }
+
+
 }

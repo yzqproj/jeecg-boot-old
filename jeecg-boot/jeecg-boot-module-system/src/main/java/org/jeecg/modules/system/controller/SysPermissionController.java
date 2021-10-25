@@ -203,7 +203,7 @@ public class SysPermissionController {
 	 */
 	@RequestMapping(value = "/getUserPermissionByToken", method = RequestMethod.GET)
 	public Result<?> getUserPermissionByToken() {
-		Result<JSONObject> result = new Result<JSONObject>();
+		Result<JSONObject> result = new Result<>();
 		try {
 			//直接获取当前用户不适用前端token
 			LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();

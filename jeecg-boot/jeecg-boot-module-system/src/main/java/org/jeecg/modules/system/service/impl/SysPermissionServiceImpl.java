@@ -73,7 +73,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 		}
 		String pid = sysPermission.getParentId();
 		if(oConvertUtils.isNotEmpty(pid)) {
-			int count = this.count(new QueryWrapper<SysPermission>().lambda().eq(SysPermission::getParentId, pid));
+			long count = this.count(new QueryWrapper<SysPermission>().lambda().eq(SysPermission::getParentId, pid));
 			if(count==1) {
 				//若父节点无其他子节点，则该父节点是叶子节点
 				this.sysPermissionMapper.setMenuLeaf(pid, 1);
@@ -108,7 +108,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 		List<SysPermission> permissionList = this.list(query);
 		if (permissionList != null && permissionList.size() > 0) {
 			String id = ""; // id
-			int num = 0; // 查出的子级数量
+			long num = 0; // 查出的子级数量
 			// 如果查出的集合不为空, 则先删除所有
 			this.remove(query);
 			// 再遍历刚才查出的集合, 根据每个对象,查找其是否仍有子级
@@ -145,7 +145,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 			throw new JeecgBootException("未找到菜单信息");
 		}
 		String pid = sysPermission.getParentId();
-		int count = this.count(new QueryWrapper<SysPermission>().lambda().eq(SysPermission::getParentId, pid));
+		long count = this.count(new QueryWrapper<SysPermission>().lambda().eq(SysPermission::getParentId, pid));
 		if(count==1) {
 			//若父节点无其他子节点，则该父节点是叶子节点
 			this.sysPermissionMapper.setMenuLeaf(pid, 1);
@@ -189,7 +189,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 				sysPermission.setParentId("");
 			}
 			//Step2.判断菜单下级是否有菜单，无则设置为叶子节点
-			int count = this.count(new QueryWrapper<SysPermission>().lambda().eq(SysPermission::getParentId, sysPermission.getId()));
+			long count = this.count(new QueryWrapper<SysPermission>().lambda().eq(SysPermission::getParentId, sysPermission.getId()));
 			if(count==0) {
 				sysPermission.setLeaf(true);
 			}
@@ -202,7 +202,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 				//a.设置新的父菜单不为叶子节点
 				this.sysPermissionMapper.setMenuLeaf(pid, 0);
 				//b.判断老的菜单下是否还有其他子菜单，没有的话则设置为叶子节点
-				int cc = this.count(new QueryWrapper<SysPermission>().lambda().eq(SysPermission::getParentId, p.getParentId()));
+				long cc = this.count(new QueryWrapper<SysPermission>().lambda().eq(SysPermission::getParentId, p.getParentId()));
 				if(cc==0) {
 					if(oConvertUtils.isNotEmpty(p.getParentId())) {
 						this.sysPermissionMapper.setMenuLeaf(p.getParentId(), 1);
@@ -226,7 +226,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 	public void deletePermRuleByPermId(String id) {
 		LambdaQueryWrapper<SysPermissionDataRule> query = new LambdaQueryWrapper<>();
 		query.eq(SysPermissionDataRule::getPermissionId, id);
-		int countValue = this.permissionDataRuleService.count(query);
+		long countValue = this.permissionDataRuleService.count(query);
 		if(countValue > 0) {
 			this.permissionDataRuleService.remove(query);	
 		}
@@ -243,7 +243,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 
 	@Override
 	public boolean hasPermission(String username, SysPermission sysPermission) {
-		int count = baseMapper.queryCountByUsername(username,sysPermission);
+		long count = baseMapper.queryCountByUsername(username,sysPermission);
 		if(count>0){
 			return true;
 		}else{

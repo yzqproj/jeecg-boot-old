@@ -3,7 +3,8 @@ package org.jeecg;
 import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.util.security.SecurityTools;
 import org.jeecg.common.util.security.entity.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 
 public class SecurityToolsTest {
     @Test
