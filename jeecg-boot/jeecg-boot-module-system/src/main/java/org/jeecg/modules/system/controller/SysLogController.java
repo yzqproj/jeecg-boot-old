@@ -3,8 +3,11 @@ package org.jeecg.modules.system.controller;
 
 import java.util.Arrays;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
@@ -31,12 +34,14 @@ import lombok.extern.slf4j.Slf4j;
  * @Author zhangweijian
  * @since 2018-12-26
  */
+@Api(tags = "日志")
 @RestController
 @RequestMapping("/sys/log")
 @Slf4j
+
 public class SysLogController {
 	
-	@Autowired
+	@Resource
 	private ISysLogService sysLogService;
 	
 	/**
@@ -47,10 +52,11 @@ public class SysLogController {
 	 * @param req
 	 * @return
 	 */
+	@ApiOperation(value = "查询所有日志")
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public Result<IPage<SysLog>> queryPageList(SysLog syslog,@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 									  @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,HttpServletRequest req) {
-		Result<IPage<SysLog>> result = new Result<IPage<SysLog>>();
+		Result<IPage<SysLog>> result = new Result<>();
 		QueryWrapper<SysLog> queryWrapper = QueryGenerator.initQueryWrapper(syslog, req.getParameterMap());
 		Page<SysLog> page = new Page<SysLog>(pageNo, pageSize);
 		//日志关键词
@@ -77,6 +83,7 @@ public class SysLogController {
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation(value = "ss")
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
 	public Result<SysLog> delete(@RequestParam(name="id",required=true) String id) {
 		Result<SysLog> result = new Result<SysLog>();

@@ -20,6 +20,7 @@ management:
         include: metrics,httptrace
 
 spring:
+
   servlet:
     multipart:
       max-file-size: 10MB
@@ -184,7 +185,7 @@ jeecg :
     #webapp文件路径
     webapp: /opt/webapp
   shiro:
-    excludeUrls: /test/jeecgDemo/demo3,/test/jeecgDemo/redisDemo/**,/category/**,/visual/**,/map/**,/jmreport/bigscreen2/**
+    excludeUrls: /test/jeecgDemo/demo3,/test/jeecgDemo/redisDemo/**,/category/**,/visual/**,/map/**,/jmreport/bigscreen2/**,/swagger-ui/**
   #阿里云oss存储和大鱼短信秘钥配置
   oss:
     accessKey: ??

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
  * @Author scott
  * @since 2018-12-21
  */
+@Api(tags = "权限管理")
 @Slf4j
 @RestController
 @RequestMapping("/sys/permission")
