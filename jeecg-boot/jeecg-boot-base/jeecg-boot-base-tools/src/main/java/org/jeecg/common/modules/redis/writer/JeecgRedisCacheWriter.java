@@ -11,6 +11,8 @@ import java.util.function.Function;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.PessimisticLockingFailureException;
+import org.springframework.data.redis.cache.CacheStatistics;
+import org.springframework.data.redis.cache.CacheStatisticsCollector;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -27,16 +29,29 @@ public class JeecgRedisCacheWriter implements RedisCacheWriter {
 
     private final RedisConnectionFactory connectionFactory;
     private final Duration sleepTime;
+    private final CacheStatisticsCollector statistics;
 
     public JeecgRedisCacheWriter(RedisConnectionFactory connectionFactory) {
         this(connectionFactory, Duration.ZERO);
     }
 
     public JeecgRedisCacheWriter(RedisConnectionFactory connectionFactory, Duration sleepTime) {
+
+        this(connectionFactory, sleepTime, CacheStatisticsCollector.none());
         Assert.notNull(connectionFactory, "ConnectionFactory must not be null!");
         Assert.notNull(sleepTime, "SleepTime must not be null!");
+    }
+
+    public JeecgRedisCacheWriter(RedisConnectionFactory connectionFactory, Duration sleepTime,
+                                 CacheStatisticsCollector cacheStatisticsCollector) {
+
+        Assert.notNull(connectionFactory, "ConnectionFactory must not be null!");
+        Assert.notNull(sleepTime, "SleepTime must not be null!");
+        Assert.notNull(cacheStatisticsCollector, "CacheStatisticsCollector must not be null!");
+
         this.connectionFactory = connectionFactory;
         this.sleepTime = sleepTime;
+        this.statistics = cacheStatisticsCollector;
     }
 
     @Override
@@ -59,7 +74,7 @@ public class JeecgRedisCacheWriter implements RedisCacheWriter {
     public byte[] get(String name, byte[] key) {
         Assert.notNull(name, "Name must not be null!");
         Assert.notNull(key, "Key must not be null!");
-        return (byte[])this.execute(name, (connection) -> {
+        return (byte[]) this.execute(name, (connection) -> {
             return connection.get(key);
         });
     }
@@ -69,7 +84,7 @@ public class JeecgRedisCacheWriter implements RedisCacheWriter {
         Assert.notNull(name, "Name must not be null!");
         Assert.notNull(key, "Key must not be null!");
         Assert.notNull(value, "Value must not be null!");
-        return (byte[])this.execute(name, (connection) -> {
+        return (byte[]) this.execute(name, (connection) -> {
             if (this.isLockingCacheWriter()) {
                 this.doLock(name, connection);
             }
@@ -96,7 +111,7 @@ public class JeecgRedisCacheWriter implements RedisCacheWriter {
 
             }
 
-            return (byte[])var7;
+            return (byte[]) var7;
         });
     }
 
@@ -106,7 +121,7 @@ public class JeecgRedisCacheWriter implements RedisCacheWriter {
         Assert.notNull(key, "Key must not be null!");
         String keyString = new String(key);
         log.info("redis remove key:" + keyString);
-        if(keyString!=null && keyString.endsWith("*")){
+        if (keyString != null && keyString.endsWith("*")) {
             execute(name, connection -> {
                 // 获取某个前缀所拥有的所有的键，某个前缀开头，后面肯定是*
                 Set<byte[]> keys = connection.keys(key);
@@ -116,7 +131,7 @@ public class JeecgRedisCacheWriter implements RedisCacheWriter {
                 }
                 return delNum;
             });
-        }else{
+        } else {
             this.execute(name, (connection) -> {
                 return connection.del(new byte[][]{key});
             });
@@ -136,7 +151,7 @@ public class JeecgRedisCacheWriter implements RedisCacheWriter {
                     wasLocked = true;
                 }
 
-                byte[][] keys = (byte[][])((Set)Optional.ofNullable(connection.keys(pattern)).orElse(Collections.emptySet())).toArray(new byte[0][]);
+                byte[][] keys = (byte[][]) ((Set) Optional.ofNullable(connection.keys(pattern)).orElse(Collections.emptySet())).toArray(new byte[0][]);
                 if (keys.length > 0) {
                     connection.del(keys);
                 }
@@ -151,6 +166,15 @@ public class JeecgRedisCacheWriter implements RedisCacheWriter {
         });
     }
 
+    @Override
+    public void clearStatistics(String name) {
+        statistics.reset(name);
+    }
+
+    @Override
+    public RedisCacheWriter withStatisticsCollector(CacheStatisticsCollector cacheStatisticsCollector) {
+        return new JeecgRedisCacheWriter(connectionFactory, sleepTime, cacheStatisticsCollector);
+    }
 
 
     void lock(String name) {
@@ -207,7 +231,7 @@ public class JeecgRedisCacheWriter implements RedisCacheWriter {
     private void checkAndPotentiallyWaitUntilUnlocked(String name, RedisConnection connection) {
         if (this.isLockingCacheWriter()) {
             try {
-                while(this.doCheckLock(name, connection)) {
+                while (this.doCheckLock(name, connection)) {
                     Thread.sleep(this.sleepTime.toMillis());
                 }
 
@@ -227,4 +251,8 @@ public class JeecgRedisCacheWriter implements RedisCacheWriter {
     }
 
 
+    @Override
+    public CacheStatistics getCacheStatistics(String cacheName) {
+        return statistics.getCacheStatistics(cacheName);
+    }
 }

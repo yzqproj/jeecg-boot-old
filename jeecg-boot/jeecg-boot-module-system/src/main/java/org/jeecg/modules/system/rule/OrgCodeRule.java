@@ -2,7 +2,7 @@ package org.jeecg.modules.system.rule;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import io.netty.util.internal.StringUtil;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import org.jeecg.common.handler.IFillRuleHandler;
 import org.jeecg.common.util.SpringContextUtils;
 import org.jeecg.common.util.YouBianCodeUtil;
@@ -38,16 +38,20 @@ public class OrgCodeRule implements IFillRuleHandler {
         String parentId = null;
         if (formData != null && formData.size() > 0) {
             Object obj = formData.get("parentId");
-            if (obj != null) parentId = obj.toString();
+            if (obj != null) {
+                parentId = obj.toString();
+            }
         } else {
             if (params != null) {
                 Object obj = params.get("parentId");
-                if (obj != null) parentId = obj.toString();
+                if (obj != null) {
+                    parentId = obj.toString();
+                }
             }
         }
 
         //如果是最高级,则查询出同级的org_code, 调用工具类生成编码并返回
-        if (StringUtil.isNullOrEmpty(parentId)) {
+        if (StringUtils.isEmpty(parentId)) {
             // 线判断数据库中的表是否为空,空则直接返回初始编码
             query1.eq(SysDepart::getParentId, "").or().isNull(SysDepart::getParentId);
             query1.orderByDesc(SysDepart::getOrgCode);

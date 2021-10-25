@@ -25,7 +25,7 @@ public interface CommonConstant {
 	/**
 	 * 系统日志类型： 登录
 	 */
-	public static final int LOG_TYPE_1 = 1;
+    int LOG_TYPE_1 = 1;
 	
 	/**
 	 * 系统日志类型： 操作
@@ -40,7 +40,7 @@ public interface CommonConstant {
 	/**
 	 * 操作日志类型： 添加
 	 */
-	public static final int OPERATE_TYPE_2 = 2;
+    int OPERATE_TYPE_2 = 2;
 	
 	/**
 	 * 操作日志类型： 更新

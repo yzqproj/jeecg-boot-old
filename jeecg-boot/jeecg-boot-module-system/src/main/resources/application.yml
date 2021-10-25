@@ -2,4 +2,10 @@ spring:
   application:
     name: jeecg-system
   profiles:
-    active: @profile.name@
+    active: dev
+
+#  config:
+#
+#    activate:
+#      on-profile: 'dev'
+#      on-profile: @profile.name@

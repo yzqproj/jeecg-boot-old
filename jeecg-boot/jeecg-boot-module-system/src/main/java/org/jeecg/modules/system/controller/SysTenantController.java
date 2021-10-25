@@ -162,7 +162,7 @@ public class SysTenantController {
      */
     @RequestMapping(value = "/queryList", method = RequestMethod.GET)
     public Result<List<SysTenant>> queryList(@RequestParam(name="ids",required=false) String ids) {
-        Result<List<SysTenant>> result = new Result<List<SysTenant>>();
+        Result<List<SysTenant>> result = new Result<>();
         LambdaQueryWrapper<SysTenant> query = new LambdaQueryWrapper<>();
         query.eq(SysTenant::getStatus, 1);
         if(oConvertUtils.isNotEmpty(ids)){
