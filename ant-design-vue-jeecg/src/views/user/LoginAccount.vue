@@ -73,7 +73,8 @@
         this.model.inputCode = ''
         getAction(`/sys/randomImage/${this.currdatetime}`).then(res=>{
           if(res.success){
-            this.randCodeImage = res.result
+            this.randCodeImage = res.result.base64
+            this.model.inputCode=res.result.realCode
             this.requestCodeSuccess=true
           }else{
             this.$message.error(res.message)

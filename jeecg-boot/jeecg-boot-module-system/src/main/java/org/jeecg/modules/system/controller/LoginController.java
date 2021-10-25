@@ -423,16 +423,21 @@ public class LoginController {
 	 */
 	@ApiOperation("获取验证码")
 	@GetMapping(value = "/randomImage/{key}")
-	public Result<String> randomImage(HttpServletResponse response,@PathVariable String key){
-		Result<String> res = new Result<String>();
+	public Result<Object> randomImage(HttpServletResponse response,@PathVariable String key){
+		Result<Object> res = new Result<>();
 		try {
+			HashMap<String,Object> hashMap=new HashMap<>();
+
+
 			String code = RandomUtil.randomString(BASE_CHECK_CODES,4);
 			String lowerCaseCode = code.toLowerCase();
 			String realKey = MD5Util.MD5Encode(lowerCaseCode+key, "utf-8");
 			redisUtil.set(realKey, lowerCaseCode, 60);
 			String base64 = RandImageUtil.generate(code);
+			hashMap.put("base64",base64);
+			hashMap.put("realCode",lowerCaseCode);
 			res.setSuccess(true);
-			res.setResult(base64);
+			res.setResult(hashMap);
 		} catch (Exception e) {
 			res.error500("获取验证码出错"+e.getMessage());
 			e.printStackTrace();
